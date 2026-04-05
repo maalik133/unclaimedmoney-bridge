@@ -1,292 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Unclaimed Funds Check</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stimulus Assistance</title>
 
 <style>
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background: #070707;
-  color: #fff;
-}
-
 body {
-  display: flex;
-  justify-content: center;
-  background:
-    radial-gradient(circle at top, rgba(255,255,255,0.04), transparent 30%),
-    linear-gradient(180deg, #0b0b0b 0%, #050505 100%);
-}
-
-.page {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  padding: 12px 10px 20px;
-}
-
-.phone-shell {
-  width: 100%;
-  max-width: 390px;
-}
-
-.card {
+  margin: 0;
+  font-family: Arial, sans-serif;
   background: #000;
-  border-radius: 18px;
-  padding: 16px 14px 20px;
-  border: 1px solid rgba(255,255,255,0.05);
-  box-shadow: 0 10px 35px rgba(0,0,0,0.4);
+  color: #fff;
+  text-align: center;
 }
 
-.top-proof {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 14px;
-}
-
-.proof-pill {
-  background: #161616;
-  border-radius: 12px;
-  padding: 8px 10px;
-  min-width: 130px;
-  border: 1px solid rgba(255,255,255,0.07);
-}
-
-.proof-name {
-  font-size: 10px;
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
-.proof-amount {
-  font-size: 12px;
-  color: #33d17a;
-  font-weight: bold;
-}
-
-.proof-location {
-  font-size: 10px;
-  color: #888;
-  margin-top: 2px;
+.container {
+  padding: 20px;
+  max-width: 500px;
+  margin: auto;
 }
 
 h1 {
-  text-align: center;
-  font-size: 32px;
-  line-height: 1.05;
-  margin: 0;
-  font-weight: 800;
+  font-size: 28px;
+  line-height: 1.3;
 }
 
-.green { color: #33d17a; }
-
-.subhead {
-  text-align: center;
-  margin: 14px auto 10px;
-  font-size: 14px;
-  color: #ff744f;
-  font-weight: 700;
-  max-width: 300px;
+.highlight {
+  color: #27d17f;
 }
 
-.urgency {
-  background: #f3deb1;
-  color: #5d4a18;
-  padding: 10px;
+.sub {
+  color: #ff6a4d;
+  margin: 15px 0;
+  font-size: 16px;
+}
+
+.warning {
+  background: #e7d3a5;
+  color: #000;
+  padding: 12px;
   border-radius: 10px;
-  font-size: 12px;
-  margin: 12px 0;
-  font-weight: 700;
+  font-size: 14px;
+  margin: 15px 0;
 }
 
 .timer {
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 14px;
+  font-size: 22px;
+  margin: 10px 0;
 }
 
 .reviews {
-  background: #161616;
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 12px;
+  margin-top: 20px;
 }
 
 .review {
-  margin-bottom: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  padding-bottom: 10px;
-}
-
-.review:last-child {
-  border-bottom: none;
+  background: #111;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  text-align: left;
 }
 
 .stars {
-  color: #f5c543;
-  font-size: 12px;
+  color: gold;
+  font-size: 18px;
 }
 
-.review-text {
-  font-size: 12px;
-  margin: 6px 0;
-  color: #d4d4d4;
+.review p {
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 8px 0;
 }
 
-.review-name {
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.review-location {
-  font-size: 11px;
-  color: #888;
-}
-
-.next {
-  text-align: center;
-  font-size: 12px;
-  color: #aaa;
-  margin: 12px 0;
-}
-
-.cta {
-  display: block;
-  width: 100%;
-  text-align: center;
-  background: #f2f2f2;
-  color: #111;
-  padding: 14px;
-  border-radius: 10px;
-  text-decoration: none;
+.name {
   font-weight: bold;
   font-size: 15px;
 }
 
+.location {
+  font-size: 13px;
+  color: #aaa;
+}
+
+.cta {
+  display: block;
+  background: #27d17f;
+  color: #000;
+  padding: 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 20px;
+  font-size: 18px;
+}
+
 .fineprint {
-  text-align: center;
-  font-size: 10px;
-  color: #777;
-  margin-top: 8px;
+  font-size: 11px;
+  color: #aaa;
+  margin-top: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="page">
-<div class="phone-shell">
-<div class="card">
-
-<div class="top-proof">
-  <div class="proof-pill" id="proofBox"></div>
-</div>
+<div class="container">
 
 <h1>
-  You Could Have <span class="green">Unclaimed Money</span><br>
-  Waiting Under Your Name
+You May Qualify For <span class="highlight">Stimulus Assistance</span><br>
+Check In Under 30 Seconds
 </h1>
 
-<div class="subhead">
-  See if any funds show up in under 30 seconds
+<div class="sub">
+See if you qualify with just a few quick steps
 </div>
 
-<div class="urgency">
-  ⚠ Limited search access may refresh soon. Check now.
+<div class="warning">
+⚠️ Limited spots available. Check eligibility now.
 </div>
 
-<div class="timer" id="timer">09:47</div>
+<div class="timer" id="timer">9:47</div>
 
-<div class="reviews" id="reviews"></div>
+<div class="reviews">
 
-<div class="next">
-  Takes about 60 seconds to enter your details and check for matching records
+<div class="review">
+<div class="stars">★★★★★</div>
+<p>I applied just to see and actually got approved. Took less than 2 minutes.</p>
+<div class="name">Marcus D.</div>
+<div class="location">Houston, TX</div>
 </div>
 
-<a href="https://giftclick.org/aff_c?offer_id=1420&aff_id=170653">
-  Start My Search →
+<div class="review">
+<div class="stars">★★★★☆</div>
+<p>Didn’t expect anything but ended up qualifying. Pretty straightforward process.</p>
+<div class="name">Ashley R.</div>
+<div class="location">Phoenix, AZ</div>
+</div>
+
+<div class="review">
+<div class="stars">★★★★★</div>
+<p>Quick and easy. Way faster than I thought it would be honestly.</p>
+<div class="name">Jordan T.</div>
+<div class="location">Atlanta, GA</div>
+</div>
+
+</div>
+
+<!-- 🔥 DIRECT LINK (NO DELAY) -->
+<a href="https://trksy.org/aff_c?offer_id=1421&aff_id=170653" class="cta">
+Check My Eligibility →
 </a>
 
 <div class="fineprint">
-  Results vary. Availability depends on public records.
+Results may vary. Not affiliated with any government agency.
 </div>
 
-</div>
-</div>
 </div>
 
 <script>
-// 🔥 EXPANDED PROOFS (more realistic variety)
-const proofs = [
-  {name:"Michael R.", amount:"$1,184 claimed", location:"Phoenix, AZ"},
-  {name:"Tiffany S.", amount:"$2,047 claimed", location:"Orlando, FL"},
-  {name:"Carlos M.", amount:"$768 claimed", location:"San Antonio, TX"},
-  {name:"Jordan P.", amount:"$1,392 claimed", location:"Columbus, OH"},
-  {name:"Ashley D.", amount:"$2,611 claimed", location:"Sacramento, CA"},
-  {name:"Brandon T.", amount:"$943 claimed", location:"Charlotte, NC"},
-  {name:"Nicole P.", amount:"$1,526 claimed", location:"Louisville, KY"},
-  {name:"Marcus L.", amount:"$2,203 claimed", location:"Detroit, MI"},
-  {name:"Danielle S.", amount:"$1,078 claimed", location:"Tampa, FL"},
-  {name:"Kevin H.", amount:"$857 claimed", location:"Denver, CO"},
-  {name:"Jasmine K.", amount:"$1,944 claimed", location:"San Diego, CA"},
-  {name:"Anthony B.", amount:"$2,488 claimed", location:"Chicago, IL"}
-];
-
-let pIndex = 0;
-function updateProof(){
-  const p = proofs[pIndex];
-  document.getElementById("proofBox").innerHTML =
-    `<div class="proof-name">${p.name}</div>
-     <div class="proof-amount">${p.amount}</div>
-     <div class="proof-location">${p.location}</div>`;
-  pIndex = (pIndex+1)%proofs.length;
-}
-setInterval(updateProof, 3000);
-updateProof();
-
-// Reviews
-const reviewData = [
-  {stars:"★★★★★", text:"I checked just to see and there was money tied to an old address. Took a couple minutes to go through.", name:"Danielle S.", loc:"Tampa, FL"},
-  {stars:"★★★★☆", text:"Not as much as I expected but something did show up tied to an old account so it was worth it.", name:"Kevin L.", loc:"Denver, CO"},
-  {stars:"★★★★★", text:"I had no idea anything would come up. Found funds from years ago connected to my name.", name:"Eric M.", loc:"Columbus, OH"},
-  {stars:"★★★★★", text:"Way easier than I thought. Saw money tied to an old bank account I forgot about.", name:"Vanessa R.", loc:"Mesa, AZ"},
-  {stars:"★★★★☆", text:"Took a minute to go through everything but I did get a result in the end.", name:"Rachel G.", loc:"Nashville, TN"}
-];
-
-let rIndex = 0;
-function renderReviews(){
-  let html = "";
-  for(let i=0;i<3;i++){
-    const r = reviewData[(rIndex+i)%reviewData.length];
-    html += `
-      <div class="review">
-        <div class="stars">${r.stars}</div>
-        <div class="review-text">${r.text}</div>
-        <div class="review-name">${r.name}</div>
-        <div class="review-location">${r.loc}</div>
-      </div>`;
-  }
-  document.getElementById("reviews").innerHTML = html;
-}
-setInterval(()=>{rIndex++;renderReviews();},4000);
-renderReviews();
-
-// Timer
-let t = 587;
-setInterval(()=>{
-  let m=Math.floor(t/60), s=t%60;
+// ⏳ countdown
+let time = 587;
+setInterval(() => {
+  let minutes = Math.floor(time / 60);
+  let seconds = time % 60;
   document.getElementById("timer").innerText =
-    `${m}:${s<10?"0":""}${s}`;
-  if(t>0)t--;
-},1000);
+    minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+  time--;
+}, 1000);
 </script>
 
 </body>
