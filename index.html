@@ -1,199 +1,430 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unclaimed Funds Check</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Unclaimed Funds Check</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0b0b0b;
-    color: white;
-    display: flex;
-    justify-content: center;
-}
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #070707;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100%;
+    }
 
-.container {
-    max-width: 420px;
-    width: 100%;
-    padding: 20px;
-}
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0;
+    }
 
-.card {
-    background: #111;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.6);
-    text-align: center;
-}
+    .page {
+      width: 100%;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.04), transparent 35%),
+        linear-gradient(180deg, #090909 0%, #050505 100%);
+      display: flex;
+      justify-content: center;
+      padding: 14px 12px 24px;
+    }
 
-h1 {
-    font-size: 22px;
-    line-height: 1.3;
-}
+    .phone-shell {
+      width: 100%;
+      max-width: 390px;
+    }
 
-.highlight {
-    color: #4ade80;
-}
+    .card {
+      width: 100%;
+      background: #000;
+      border-radius: 18px;
+      padding: 18px 16px 22px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
 
-.subtext {
-    color: #ccc;
-    font-size: 14px;
-    margin-top: 8px;
-}
+    .top-proof {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 14px;
+    }
 
-.warning {
-    background: #1f2937;
-    color: #facc15;
-    padding: 10px;
-    border-radius: 10px;
-    margin: 15px 0;
-    font-size: 13px;
-}
+    .proof-pill {
+      background: #161616;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 8px 10px;
+      min-width: 128px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    }
 
-.timer {
-    font-size: 18px;
-    margin: 10px 0;
-    color: #f87171;
-    font-weight: bold;
-}
+    .proof-name {
+      font-size: 10px;
+      color: #f3f3f3;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
 
-.testimonial-box {
-    background: #1a1a1a;
-    border-radius: 12px;
-    padding: 15px;
-    margin-top: 15px;
-    text-align: left;
-}
+    .proof-amount {
+      font-size: 12px;
+      color: #36d67c;
+      font-weight: 700;
+    }
 
-.name {
-    font-weight: bold;
-    font-size: 14px;
-}
+    .proof-location {
+      font-size: 10px;
+      color: #8d8d8d;
+      margin-top: 2px;
+    }
 
-.location {
-    font-size: 12px;
-    color: #aaa;
-}
+    h1 {
+      margin: 0;
+      text-align: center;
+      font-size: 34px;
+      line-height: 1.03;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
 
-.amount {
-    color: #4ade80;
-    font-weight: bold;
-}
+    .green {
+      color: #36d67c;
+    }
 
-.btn {
-    margin-top: 20px;
-    display: block;
-    background: white;
-    color: black;
-    padding: 14px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
-}
+    .subhead {
+      margin: 14px auto 10px;
+      text-align: center;
+      color: #ff6f4d;
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 700;
+      max-width: 300px;
+    }
 
-.footer {
-    margin-top: 15px;
-    font-size: 11px;
-    color: #777;
-}
-</style>
+    .urgency-bar {
+      background: #f4deb0;
+      color: #5f4b17;
+      border: 1px solid #dfc178;
+      border-radius: 12px;
+      padding: 11px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0 14px;
+      font-size: 11.5px;
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .urgency-icon {
+      flex: 0 0 auto;
+      font-size: 13px;
+    }
+
+    .timer-wrap {
+      text-align: center;
+      margin: 0 0 14px;
+    }
+
+    .timer-label {
+      font-size: 11px;
+      color: #8d8d8d;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .timer {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+
+    .reviews-box {
+      background: #161616;
+      border-radius: 14px;
+      padding: 14px 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+      min-height: 286px;
+    }
+
+    .reviews-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .stars {
+      color: #f5c543;
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    .review-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 230px;
+      overflow: hidden;
+    }
+
+    .review {
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 12px;
+    }
+
+    .review:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .review-stars {
+      color: #f5c543;
+      font-size: 12px;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .review-text {
+      color: #d4d4d4;
+      font-size: 12.5px;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+
+    .review-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .review-location {
+      font-size: 11px;
+      color: #8e8e8e;
+      margin-top: 2px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin: 16px 0 14px;
+      font-size: 11px;
+      color: #8d8d8d;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: #8d8d8d;
+      text-decoration: none;
+    }
+
+    .cta {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: #f2f2f2;
+      color: #151515;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 15px;
+      border-radius: 12px;
+      padding: 15px 14px;
+      box-shadow: 0 3px 10px rgba(255,255,255,0.05);
+      transition: transform 0.15s ease;
+    }
+
+    .cta:active {
+      transform: scale(0.985);
+    }
+
+    .fineprint {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 10.5px;
+      color: #6f6f6f;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 420px) {
+      .page {
+        padding: 10px 10px 18px;
+      }
+
+      .card {
+        border-radius: 16px;
+        padding: 16px 14px 20px;
+      }
+
+      h1 {
+        font-size: 31px;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="page">
+    <div class="phone-shell">
+      <div class="card">
 
-<div class="container">
-    <div class="card">
+        <div class="top-proof">
+          <div class="proof-pill">
+            <div class="proof-name">Michael R.</div>
+            <div class="proof-amount">$1,184 located</div>
+            <div class="proof-location">Phoenix, AZ</div>
+          </div>
+        </div>
 
         <h1>
-            You May Have <span class="highlight">Unclaimed Money</span><br>
-            Waiting Under Your Name
+          You Could Have <span class="green">Unclaimed Money</span><br>
+          Waiting Under Your Name
         </h1>
 
-        <div class="subtext">
-            Check in under 30 seconds to see if funds are available
+        <div class="subhead">
+          See if any funds show up in under 30 seconds
         </div>
 
-        <div class="warning">
-            ⚠️ Limited records available — verify eligibility now
+        <div class="urgency-bar">
+          <div class="urgency-icon">⚠</div>
+          <div>LIMITED TIME: Search access may refresh soon. Check eligibility now.</div>
         </div>
 
-        <div class="timer" id="timer">02:00</div>
-
-        <div class="testimonial-box" id="testimonial">
-            <div class="name">Loading...</div>
+        <div class="timer-wrap">
+          <div class="timer-label">Current search session</div>
+          <div class="timer" id="timer">09:47</div>
         </div>
 
-        <!-- CTA (PUT YOUR AFFILIATE LINK BELOW) -->
-        <a href="https://giftclick.org/aff_c?offer_id=1420&aff_id=170653" class="btn">Check Available Funds →</a>
+        <div class="reviews-box">
+          <div class="reviews-title">
+            <span class="stars">★★★★★</span>
+            <span>What People Are Saying</span>
+          </div>
 
-        <div class="footer">
-            Results may vary. Availability depends on public records.
+          <div class="review-list" id="reviewList">
+            <div class="review">
+              <div class="review-stars">★★★★★</div>
+              <div class="review-text">
+                I checked just to see and there was money tied to an old address. It was not a huge process either. Took me a couple minutes to look into it.
+              </div>
+              <div class="review-name">Danielle S.</div>
+              <div class="review-location">Tampa, Florida</div>
+            </div>
+
+            <div class="review">
+              <div class="review-stars">★★★★★</div>
+              <div class="review-text">
+                I had no idea anything would come up. Found a little over $900 connected to my name from years ago. Glad I actually checked.
+              </div>
+              <div class="review-name">Eric M.</div>
+              <div class="review-location">Columbus, Ohio</div>
+            </div>
+
+            <div class="review">
+              <div class="review-stars">★★★★★</div>
+              <div class="review-text">
+                I was expecting nothing honestly. Ended up seeing funds from an old account I forgot about. Way easier than I thought it would be.
+              </div>
+              <div class="review-name">Vanessa R.</div>
+              <div class="review-location">Mesa, Arizona</div>
+            </div>
+          </div>
         </div>
 
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+
+        <a href="https://giftclick.org/aff_c?offer_id=1420&aff_id=170653" class="cta" target="_blank">Check Available Funds →</a>
+
+        <div class="fineprint">
+          Results will vary. Availability depends on public records and submitted information.
+        </div>
+
+      </div>
     </div>
-</div>
+  </div>
 
-<script>
-// Countdown Timer
-let time = 120;
-const timerEl = document.getElementById("timer");
+  <script>
+    const reviews = [
+      {
+        text: "I checked just to see and there was money tied to an old address. It was not a huge process either. Took me a couple minutes to look into it.",
+        name: "Danielle S.",
+        location: "Tampa, Florida"
+      },
+      {
+        text: "I had no idea anything would come up. Found a little over $900 connected to my name from years ago. Glad I actually checked.",
+        name: "Eric M.",
+        location: "Columbus, Ohio"
+      },
+      {
+        text: "I was expecting nothing honestly. Ended up seeing funds from an old account I forgot about. Way easier than I thought it would be.",
+        name: "Vanessa R.",
+        location: "Mesa, Arizona"
+      },
+      {
+        text: "Mine showed up from an old payroll check. I almost skipped it because I figured it was not worth trying, but it turned out to be worth checking.",
+        name: "Brandon T.",
+        location: "Charlotte, North Carolina"
+      },
+      {
+        text: "I had moved twice and thought there was no chance anything would be under my name. A result actually came up, which surprised me.",
+        name: "Jasmine L.",
+        location: "Sacramento, California"
+      },
+      {
+        text: "I only did it because a friend mentioned it. Found funds connected to a bank account I closed a long time ago.",
+        name: "Nicole P.",
+        location: "Louisville, Kentucky"
+      }
+    ];
 
-setInterval(() => {
-    let minutes = Math.floor(time / 60);
-    let seconds = time % 60;
-    timerEl.innerHTML = 
-        `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    if (time > 0) time--;
-}, 1000);
+    function renderReviews(startIndex) {
+      const reviewList = document.getElementById("reviewList");
+      let html = "";
 
-// Rotating Testimonials
-const testimonials = [
-    {
-        name: "James R.",
-        location: "Texas",
-        text: "Found $2,340 in unclaimed funds I didn’t even know existed."
-    },
-    {
-        name: "Ashley M.",
-        location: "Florida",
-        text: "Took less than a minute — ended up claiming $1,875."
-    },
-    {
-        name: "David L.",
-        location: "Georgia",
-        text: "Checked out of curiosity and saw $3,120 tied to my name."
-    },
-    {
-        name: "Marcus T.",
-        location: "Ohio",
-        text: "Was skeptical at first but actually found $980 sitting there."
-    },
-    {
-        name: "Brianna K.",
-        location: "California",
-        text: "Quick check showed $2,600 from old accounts."
+      for (let i = 0; i < 3; i++) {
+        const review = reviews[(startIndex + i) % reviews.length];
+        html += `
+          <div class="review">
+            <div class="review-stars">★★★★★</div>
+            <div class="review-text">${review.text}</div>
+            <div class="review-name">${review.name}</div>
+            <div class="review-location">${review.location}</div>
+          </div>
+        `;
+      }
+
+      reviewList.innerHTML = html;
     }
-];
 
-let index = 0;
-const testimonialEl = document.getElementById("testimonial");
+    let reviewIndex = 0;
+    renderReviews(reviewIndex);
 
-function updateTestimonial() {
-    const t = testimonials[index];
-    testimonialEl.innerHTML = `
-        <div class="name">${t.name}</div>
-        <div class="location">${t.location}</div>
-        <div class="amount">${t.text}</div>
-    `;
-    index = (index + 1) % testimonials.length;
-}
+    setInterval(() => {
+      reviewIndex = (reviewIndex + 1) % reviews.length;
+      renderReviews(reviewIndex);
+    }, 4500);
 
-updateTestimonial();
-setInterval(updateTestimonial, 3000);
-</script>
+    let totalSeconds = 587;
+    const timerEl = document.getElementById("timer");
 
+    setInterval(() => {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      timerEl.textContent = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+      if (totalSeconds > 0) totalSeconds--;
+    }, 1000);
+  </script>
 </body>
 </html>
