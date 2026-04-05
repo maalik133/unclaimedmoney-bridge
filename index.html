@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unclaimed Money Search</title>
+
+  <style>
+    :root {
+      --bg: #07090d;
+      --card: #0d1117;
+      --card-2: #121821;
+      --text: #f8fafc;
+      --muted: #a7b0bd;
+      --accent: #4f46e5;
+      --accent-2: #7c3aed;
+      --gold: #f5c451;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 18px 50px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(79,70,229,0.12), transparent 28%),
+        linear-gradient(180deg, #05070b 0%, var(--bg) 100%);
+      color: var(--text);
+      padding: 16px;
+    }
+
+    .wrap {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #0b0f15 0%, #0d1117 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--gold);
+      background: rgba(245,196,81,0.08);
+      border: 1px solid rgba(245,196,81,0.18);
+      padding: 7px 10px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .highlight {
+      color: var(--gold);
+    }
+
+    .sub {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.5;
+    }
+
+    .note {
+      margin-top: 16px;
+      background: rgba(245,196,81,0.08);
+      border: 1px solid rgba(245,196,81,0.18);
+      color: #f7e2a0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 0.86rem;
+      line-height: 1.4;
+    }
+
+    .panel {
+      margin-top: 16px;
+      border: 1px solid var(--border);
+      background: var(--card-2);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .steps {
+      display: grid;
+      gap: 10px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .num {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      margin-top: 1px;
+    }
+
+    .step strong {
+      display: block;
+      font-size: 0.96rem;
+      margin-bottom: 3px;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .mini {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .mini strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.94rem;
+    }
+
+    .mini p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .precta {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .cta {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      text-align: center;
+      text-decoration: none;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 800;
+      color: white;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      box-shadow: 0 12px 26px rgba(79,70,229,0.28);
+    }
+
+    .micro {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 420px) {
+      body { padding: 12px; }
+      .card { padding: 16px; border-radius: 20px; }
+      h1 { font-size: 1.65rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <div class="eyebrow">Featured Search</div>
+
+      <h1>
+        Search for possible <span class="highlight">unclaimed money</span>
+      </h1>
+
+      <p class="sub">
+        This page explains what to expect before you continue to the next step.
+      </p>
+
+      <div class="note">
+        This offer is for an unclaimed money search service. Availability of results may vary based on the information provided.
+      </div>
+
+      <div class="panel">
+        <h2>How it works</h2>
+
+        <div class="steps">
+          <div class="step">
+            <div class="num">1</div>
+            <div>
+              <strong>Continue to the next step</strong>
+              <p>Tap the button below to access the search page.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="num">2</div>
+            <div>
+              <strong>Enter your basic information</strong>
+              <p>Provide accurate details so the search process can continue correctly.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="num">3</div>
+            <div>
+              <strong>Complete the required prompts</strong>
+              <p>Answer all fields and questions fully on the next page.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="num">4</div>
+            <div>
+              <strong>Review the search flow</strong>
+              <p>You’ll be guided through the next steps to continue the process.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mini">
+        <strong>What happens next?</strong>
+        <p>You’ll continue to the next page where you can begin the unclaimed money search process.</p>
+      </div>
+
+      <p class="precta">Tap below to continue to the next step.</p>
+
+      <a class="cta" href="https://giftclick.org/aff_c?offer_id=1420&aff_id=170653" rel="nofollow sponsored">
+        Continue to Search →
+      </a>
+
+      <p class="micro">
+        This page is intended to explain the process before continuing. Search results and eligibility may vary.
+      </p>
+    </section>
+  </main>
+</body>
+</html>
