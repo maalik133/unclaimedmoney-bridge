@@ -1,244 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Unclaimed Money Search</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check for Unclaimed Funds</title>
 
-  <style>
-    :root {
-      --bg: #f6f8fb;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-      --accent: #0ea5e9;
-      --accent-2: #0284c7;
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: radial-gradient(circle at top, #161616 0%, #0b0b0b 45%, #000 100%);
+  color: #fff;
+  min-height: 100vh;
+}
 
-      --border: rgba(0,0,0,0.08);
-    }
+.wrapper {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
 
-    * { box-sizing: border-box; }
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: #050505;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 26px 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  text-align: center;
+}
 
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      padding: 16px;
-    }
+/* badge */
+.proof-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 10px 12px;
+  width: 170px;
+  text-align: left;
+  font-size: 12px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
 
-    .wrap {
-      max-width: 480px;
-      margin: 0 auto;
-    }
+.proof-badge.fade {
+  opacity: 0;
+  transform: translateY(6px);
+}
 
-    .card {
-      background: var(--card);
-      border-radius: 20px;
-      padding: 20px;
-      border: 1px solid var(--border);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
-    }
+.name {
+  font-weight: 700;
+}
 
-    .badge {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--accent-2);
-      background: rgba(14,165,233,0.12);
-      padding: 6px 10px;
-      border-radius: 999px;
-      margin-bottom: 10px;
-    }
+.status {
+  color: #28d7ff;
+  font-weight: 600;
+}
 
-    h1 {
-      font-size: 1.7rem;
-      line-height: 1.1;
-      margin: 0;
-    }
+.location {
+  color: rgba(255,255,255,0.6);
+  font-size: 11px;
+}
 
-    .highlight {
-      color: var(--accent-2);
-    }
+/* text */
+.top-note {
+  font-size: 11px;
+  font-weight: 700;
+  background: #f4c542;
+  color: #000;
+  padding: 8px 10px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-bottom: 16px;
+}
 
-    .sub {
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.45;
-    }
+h1 {
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
 
-    .proof {
-      margin-top: 14px;
-      font-size: 0.85rem;
-      color: var(--muted);
-      background: #f1f5f9;
-      padding: 10px 12px;
-      border-radius: 10px;
-    }
+.accent {
+  color: #28d7ff;
+}
 
-    .steps {
-      margin-top: 18px;
-      display: grid;
-      gap: 10px;
-    }
+.subtext {
+  font-size: 14px;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 16px;
+}
 
-    .step {
-      display: grid;
-      grid-template-columns: 28px 1fr;
-      gap: 10px;
-      padding: 12px;
-      border-radius: 12px;
-      background: #f8fafc;
-      border: 1px solid var(--border);
-    }
+/* urgency */
+.urgency {
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
 
-    .num {
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      background: var(--accent);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 800;
-    }
+/* steps */
+.steps {
+  text-align: left;
+  background: #111;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
 
-    .step strong {
-      display: block;
-      font-size: 0.95rem;
-      margin-bottom: 2px;
-    }
+.step {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
 
-    .step p {
-      margin: 0;
-      font-size: 0.88rem;
-      color: var(--muted);
-    }
+.step:last-child {
+  margin-bottom: 0;
+}
 
-    .mini {
-      margin-top: 14px;
-      padding: 12px;
-      border-radius: 12px;
-      background: #f8fafc;
-      border: 1px solid var(--border);
-    }
+.step-num {
+  background: #28d7ff;
+  color: #000;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .mini strong {
-      display: block;
-      margin-bottom: 4px;
-    }
+.step-text {
+  font-size: 13px;
+}
 
-    .mini p {
-      margin: 0;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
+/* CTA */
+.cta {
+  display: block;
+  width: 100%;
+  background: linear-gradient(180deg, #2ee4ff, #10bcd7);
+  color: #000;
+  font-weight: 800;
+  text-decoration: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 17px;
+  margin-bottom: 10px;
+}
 
-    .precta {
-      margin-top: 16px;
-      text-align: center;
-      font-weight: 700;
-      font-size: 0.9rem;
-    }
-
-    .cta {
-      display: block;
-      width: 100%;
-      margin-top: 10px;
-      text-align: center;
-      padding: 16px;
-      border-radius: 12px;
-      font-weight: 800;
-      text-decoration: none;
-      color: white;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      font-size: 1rem;
-    }
-
-    .micro {
-      margin-top: 10px;
-      text-align: center;
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-  </style>
+/* footer */
+.disclaimer {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+}
+</style>
 </head>
 
 <body>
-  <main class="wrap">
-    <section class="card">
 
-      <div class="badge">Search Tool</div>
+<div class="wrapper">
+  <div class="card">
 
-      <h1>
-        See if you have <span class="highlight">unclaimed money</span>
-      </h1>
+    <!-- rotating badge -->
+    <div class="proof-badge" id="proofBadge">
+      <div class="name" id="proofName">David L.</div>
+      <div class="status" id="proofStatus">✓ Match found during search</div>
+      <div class="location" id="proofLocation">Atlanta, GA</div>
+    </div>
 
-      <p class="sub">
-        Many users search for unclaimed funds from old accounts, refunds, or other sources.
-      </p>
+    <div class="top-note">Check availability in your area</div>
 
-      <div class="proof">
-        Users have reported finding balances after completing the search process.
+    <h1>See If You May Have <span class="accent">Unclaimed Funds</span></h1>
+
+    <p class="subtext">
+      Continue to check whether there may be unclaimed money or assets linked to your information.
+    </p>
+
+    <div class="urgency">
+      Limited search access available right now
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">Click continue below</div>
       </div>
 
-      <div class="steps">
-
-        <div class="step">
-          <div class="num">1</div>
-          <div>
-            <strong>Continue to the search page</strong>
-            <p>Tap below to begin the process.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="num">2</div>
-          <div>
-            <strong>Enter your basic information</strong>
-            <p>Name, address, and other details are required.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="num">3</div>
-          <div>
-            <strong>Complete the required steps</strong>
-            <p>Follow all prompts to continue through the process.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="num">4</div>
-          <div>
-            <strong>Review your search results</strong>
-            <p>Results may vary depending on your information.</p>
-          </div>
-        </div>
-
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Enter your details</div>
       </div>
 
-      <div class="mini">
-        <strong>What happens next?</strong>
-        <p>You’ll be taken to the search page where you can enter your information and continue.</p>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">Complete required steps on next page</div>
       </div>
+    </div>
 
-      <p class="precta">Tap below to continue to the search page</p>
+    <a href="https://giftclick.org/aff_c?offer_id=1420&aff_id=170653" class="cta">Continue to Check</a>
 
-      <a class="cta" href="https://giftclick.org/aff_c?offer_id=1420&aff_id=170653">
-        Continue →
-      </a>
+    <div class="disclaimer">
+      This site is not affiliated with any government agency. Results are not guaranteed.
+    </div>
 
-      <p class="micro">
-        This is a search tool. Results and availability may vary.
-      </p>
+  </div>
+</div>
 
-    </section>
-  </main>
+<script>
+const names = ["David L.","Maria S.","James T.","Ashley R.","Kevin M.","Jessica B.","Chris D."];
+const locations = ["Atlanta, GA","Houston, TX","Orlando, FL","Phoenix, AZ","Chicago, IL","Dallas, TX","Charlotte, NC"];
+const statuses = [
+  "✓ Match found during search",
+  "✓ Possible records located",
+  "✓ Completed a search",
+  "✓ Records appeared under name",
+  "✓ Search returned results"
+];
+
+const nameEl = document.getElementById("proofName");
+const statusEl = document.getElementById("proofStatus");
+const locationEl = document.getElementById("proofLocation");
+const badge = document.getElementById("proofBadge");
+
+function rotateProof() {
+  badge.classList.add("fade");
+
+  setTimeout(() => {
+    const i = Math.floor(Math.random() * names.length);
+    const j = Math.floor(Math.random() * statuses.length);
+
+    nameEl.textContent = names[i];
+    statusEl.textContent = statuses[j];
+    locationEl.textContent = locations[i];
+
+    badge.classList.remove("fade");
+  }, 300);
+}
+
+setInterval(rotateProof, 3000);
+</script>
+
 </body>
 </html>
