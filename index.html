@@ -1,471 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Check for Unclaimed Funds</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unclaimed Funds Check</title>
 
-    :root {
-      --bg-1: #050505;
-      --bg-2: #0f0f10;
-      --card: rgba(14, 14, 15, 0.92);
-      --border: rgba(255, 255, 255, 0.08);
-      --text: #ffffff;
-      --muted: rgba(255, 255, 255, 0.72);
-      --muted-2: rgba(255, 255, 255, 0.52);
-      --accent: #21d4fd;
-      --accent-dark: #0eb8d8;
-      --pill: #f6c94a;
-      --shadow: 0 20px 70px rgba(0, 0, 0, 0.45);
-      --radius: 26px;
-    }
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0b0b;
+    color: white;
+    display: flex;
+    justify-content: center;
+}
 
-    html, body {
-      width: 100%;
-      min-height: 100%;
-      font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(33, 212, 253, 0.10), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(33, 212, 253, 0.07), transparent 22%),
-        linear-gradient(180deg, #111214 0%, #060606 55%, #000000 100%);
-      color: var(--text);
-    }
+.container {
+    max-width: 420px;
+    width: 100%;
+    padding: 20px;
+}
 
-    body {
-      overflow-x: hidden;
-    }
+.card {
+    background: #111;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    text-align: center;
+}
 
-    .page {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 18px 14px 26px;
-    }
+h1 {
+    font-size: 22px;
+    line-height: 1.3;
+}
 
-    .shell {
-      width: 100%;
-      max-width: 460px;
-      position: relative;
-    }
+.highlight {
+    color: #4ade80;
+}
 
-    .activity-wrap {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 12px;
-      min-height: 58px;
-    }
+.subtext {
+    color: #ccc;
+    font-size: 14px;
+    margin-top: 8px;
+}
 
-    .activity-chip {
-      width: 100%;
-      max-width: 340px;
-      background: rgba(18, 18, 19, 0.92);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 12px 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      backdrop-filter: blur(8px);
-      transition: opacity 0.28s ease, transform 0.28s ease;
-    }
+.warning {
+    background: #1f2937;
+    color: #facc15;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 15px 0;
+    font-size: 13px;
+}
 
-    .activity-chip.fade {
-      opacity: 0;
-      transform: translateY(8px);
-    }
+.timer {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #f87171;
+    font-weight: bold;
+}
 
-    .activity-top {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-      font-size: 12px;
-      line-height: 1.2;
-    }
+.testimonial-box {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 15px;
+    text-align: left;
+}
 
-    .activity-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #39e27d;
-      flex-shrink: 0;
-    }
+.name {
+    font-weight: bold;
+    font-size: 14px;
+}
 
-    .activity-name {
-      font-weight: 700;
-      color: #fff;
-    }
+.location {
+    font-size: 12px;
+    color: #aaa;
+}
 
-    .activity-city {
-      color: var(--muted-2);
-      font-size: 11px;
-      margin-left: auto;
-      white-space: nowrap;
-    }
+.amount {
+    color: #4ade80;
+    font-weight: bold;
+}
 
-    .activity-text {
-      font-size: 12px;
-      color: #bfefff;
-      font-weight: 600;
-      line-height: 1.35;
-    }
+.btn {
+    margin-top: 20px;
+    display: block;
+    background: white;
+    color: black;
+    padding: 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+}
 
-    .card {
-      background: linear-gradient(180deg, rgba(17,17,18,0.96) 0%, rgba(8,8,9,0.96) 100%);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 22px 18px 18px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 15% 0%, rgba(33, 212, 253, 0.12), transparent 22%),
-        radial-gradient(circle at 100% 20%, rgba(33, 212, 253, 0.07), transparent 18%);
-      pointer-events: none;
-    }
-
-    .inner {
-      position: relative;
-      z-index: 1;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--pill);
-      color: #111;
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.2px;
-      margin-bottom: 16px;
-    }
-
-    h1 {
-      font-size: 31px;
-      line-height: 1.05;
-      letter-spacing: -0.9px;
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-
-    .accent {
-      color: var(--accent);
-    }
-
-    .subtext {
-      font-size: 14px;
-      line-height: 1.5;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-
-    .status-bar {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      padding: 12px 14px;
-      margin-bottom: 16px;
-      text-align: left;
-    }
-
-    .status-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-
-    .status-sub {
-      font-size: 12px;
-      line-height: 1.4;
-      color: var(--muted-2);
-    }
-
-    .steps {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 16px;
-    }
-
-    .steps-head {
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      text-align: left;
-      color: #fff;
-    }
-
-    .step {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      text-align: left;
-      margin-bottom: 12px;
-    }
-
-    .step:last-child {
-      margin-bottom: 0;
-    }
-
-    .step-num {
-      width: 26px;
-      height: 26px;
-      min-width: 26px;
-      border-radius: 50%;
-      background: linear-gradient(180deg, var(--accent) 0%, var(--accent-dark) 100%);
-      color: #041018;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      font-weight: 800;
-      margin-top: 1px;
-    }
-
-    .step-copy {
-      font-size: 13px;
-      line-height: 1.4;
-      color: var(--muted);
-    }
-
-    .step-copy strong {
-      color: #fff;
-      font-weight: 700;
-    }
-
-    .cta {
-      display: block;
-      width: 100%;
-      border: none;
-      outline: none;
-      text-decoration: none;
-      text-align: center;
-      background: linear-gradient(180deg, #31e5ff 0%, #10bfd9 100%);
-      color: #041018;
-      font-size: 18px;
-      font-weight: 800;
-      padding: 17px 16px;
-      border-radius: 16px;
-      box-shadow: 0 12px 32px rgba(16, 191, 217, 0.28);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-      margin-bottom: 12px;
-    }
-
-    .cta:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 16px 36px rgba(16, 191, 217, 0.34);
-    }
-
-    .micro {
-      font-size: 11px;
-      line-height: 1.45;
-      color: var(--muted-2);
-      text-align: center;
-    }
-
-    .footer-note {
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      font-size: 11px;
-      line-height: 1.45;
-      color: rgba(255,255,255,0.48);
-      text-align: center;
-    }
-
-    @media (max-width: 420px) {
-      .page {
-        padding: 14px 10px 20px;
-      }
-
-      .shell {
-        max-width: 100%;
-      }
-
-      .activity-wrap {
-        margin-bottom: 10px;
-        min-height: 54px;
-      }
-
-      .activity-chip {
-        max-width: 100%;
-        border-radius: 16px;
-        padding: 11px 12px;
-      }
-
-      .card {
-        border-radius: 22px;
-        padding: 18px 14px 16px;
-      }
-
-      h1 {
-        font-size: 27px;
-      }
-
-      .subtext {
-        font-size: 13px;
-      }
-
-      .cta {
-        font-size: 17px;
-        padding: 16px 14px;
-        border-radius: 14px;
-      }
-
-      .steps {
-        padding: 12px;
-      }
-
-      .step-copy {
-        font-size: 12.5px;
-      }
-    }
-
-    @media (max-width: 360px) {
-      h1 {
-        font-size: 24px;
-      }
-
-      .eyebrow {
-        font-size: 10px;
-      }
-
-      .activity-top,
-      .activity-text,
-      .status-title,
-      .status-sub,
-      .step-copy {
-        line-height: 1.35;
-      }
-    }
-  </style>
+.footer {
+    margin-top: 15px;
+    font-size: 11px;
+    color: #777;
+}
+</style>
 </head>
+
 <body>
-  <div class="page">
-    <div class="shell">
-      <div class="activity-wrap">
-        <div class="activity-chip" id="activityChip">
-          <div class="activity-top">
-            <span class="activity-dot"></span>
-            <span class="activity-name" id="activityName">Michael R.</span>
-            <span class="activity-city" id="activityCity">Tampa, FL</span>
-          </div>
-          <div class="activity-text" id="activityText">Recently completed the next step</div>
+
+<div class="container">
+    <div class="card">
+
+        <h1>
+            You May Have <span class="highlight">Unclaimed Money</span><br>
+            Waiting Under Your Name
+        </h1>
+
+        <div class="subtext">
+            Check in under 30 seconds to see if funds are available
         </div>
-      </div>
 
-      <div class="card">
-        <div class="inner">
-          <div class="eyebrow">Check availability in your area</div>
-
-          <h1>
-            See If You May Have <span class="accent">Unclaimed Funds</span>
-          </h1>
-
-          <p class="subtext">
-            Continue to the next page to check whether unclaimed money or related records may be linked to your information.
-          </p>
-
-          <div class="status-bar">
-            <div class="status-title">Search access is currently available</div>
-            <div class="status-sub">Complete the next step below to continue to the search page.</div>
-          </div>
-
-          <div class="steps">
-            <div class="steps-head">How it works:</div>
-
-            <div class="step">
-              <div class="step-num">1</div>
-              <div class="step-copy"><strong>Tap continue</strong> to go to the next page.</div>
-            </div>
-
-            <div class="step">
-              <div class="step-num">2</div>
-              <div class="step-copy"><strong>Enter your information</strong> where requested.</div>
-            </div>
-
-            <div class="step">
-              <div class="step-num">3</div>
-              <div class="step-copy"><strong>Review and complete</strong> any required steps shown on the next page.</div>
-            </div>
-          </div>
-
-          <a class="cta" href="https://giftclick.org/aff_c?offer_id=1420&aff_id=170653" target="_blank" rel="noopener noreferrer">
-            Continue to Check
-          </a>
-
-          <div class="micro">
-            By continuing, you may be redirected to a third-party page where additional information and consent may be required.
-          </div>
-
-          <div class="footer-note">
-            This site is not affiliated with any government agency. Results are not guaranteed.
-          </div>
+        <div class="warning">
+            ⚠️ Limited records available — verify eligibility now
         </div>
-      </div>
+
+        <div class="timer" id="timer">02:00</div>
+
+        <div class="testimonial-box" id="testimonial">
+            <div class="name">Loading...</div>
+        </div>
+
+        <!-- CTA (PUT YOUR AFFILIATE LINK BELOW) -->
+        <a href="https://giftclick.org/aff_c?offer_id=1420&aff_id=170653" class="btn">Check Available Funds →</a>
+
+        <div class="footer">
+            Results may vary. Availability depends on public records.
+        </div>
+
     </div>
-  </div>
+</div>
 
-  <script>
-    const activityData = [
-      { name: "Michael R.", city: "Tampa, FL", text: "Claimed $341.77" },
-      { name: "Ashley T.", city: "Dallas, TX", text: "Claimed $1080.18" },
-      { name: "Jordan M.", city: "Atlanta, GA", text: "Claimed $492.05" },
-      { name: "Samantha L.", city: "Phoenix, AZ", text: "Claimed $106.07" },
-      { name: "Chris D.", city: "Charlotte, NC", text: "Claimed $3998.50" },
-      { name: "Anthony P.", city: "Houston, TX", text: "Claimed $98.76" },
-      { name: "Nicole H.", city: "Orlando, FL", text: "Claimed $410.00" },
-      { name: "Brandon S.", city: "Nashville, TN", text: "Claimed $76.71" },
-      { name: "Kayla J.", city: "Jacksonville, FL", text: "Claimed $292.00" },
-      { name: "Eric W.", city: "Columbus, OH", text: "Claimed $1456.08" },
-      { name: "Lauren C.", city: "Raleigh, NC", text: "Claimed $98.22" },
-      { name: "Tyler B.", city: "Indianapolis, IN", text: "Claimed $387.90" }
-    ];
+<script>
+// Countdown Timer
+let time = 120;
+const timerEl = document.getElementById("timer");
 
-    const chip = document.getElementById("activityChip");
-    const nameEl = document.getElementById("activityName");
-    const cityEl = document.getElementById("activityCity");
-    const textEl = document.getElementById("activityText");
+setInterval(() => {
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+    timerEl.innerHTML = 
+        `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    if (time > 0) time--;
+}, 1000);
 
-    let lastIndex = 0;
-
-    function rotateActivity() {
-      chip.classList.add("fade");
-
-      setTimeout(() => {
-        let nextIndex;
-        do {
-          nextIndex = Math.floor(Math.random() * activityData.length);
-        } while (nextIndex === lastIndex && activityData.length > 1);
-
-        lastIndex = nextIndex;
-        const item = activityData[nextIndex];
-
-        nameEl.textContent = item.name;
-        cityEl.textContent = item.city;
-        textEl.textContent = item.text;
-
-        chip.classList.remove("fade");
-      }, 260);
+// Rotating Testimonials
+const testimonials = [
+    {
+        name: "James R.",
+        location: "Texas",
+        text: "Found $2,340 in unclaimed funds I didn’t even know existed."
+    },
+    {
+        name: "Ashley M.",
+        location: "Florida",
+        text: "Took less than a minute — ended up claiming $1,875."
+    },
+    {
+        name: "David L.",
+        location: "Georgia",
+        text: "Checked out of curiosity and saw $3,120 tied to my name."
+    },
+    {
+        name: "Marcus T.",
+        location: "Ohio",
+        text: "Was skeptical at first but actually found $980 sitting there."
+    },
+    {
+        name: "Brianna K.",
+        location: "California",
+        text: "Quick check showed $2,600 from old accounts."
     }
+];
 
-    setInterval(rotateActivity, 2800);
-  </script>
+let index = 0;
+const testimonialEl = document.getElementById("testimonial");
+
+function updateTestimonial() {
+    const t = testimonials[index];
+    testimonialEl.innerHTML = `
+        <div class="name">${t.name}</div>
+        <div class="location">${t.location}</div>
+        <div class="amount">${t.text}</div>
+    `;
+    index = (index + 1) % testimonials.length;
+}
+
+updateTestimonial();
+setInterval(updateTestimonial, 3000);
+</script>
+
 </body>
 </html>
