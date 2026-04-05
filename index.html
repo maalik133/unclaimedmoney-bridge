@@ -1,258 +1,471 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Check for Unclaimed Funds</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Check for Unclaimed Funds</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-<style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    :root {
+      --bg-1: #050505;
+      --bg-2: #0f0f10;
+      --card: rgba(14, 14, 15, 0.92);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.72);
+      --muted-2: rgba(255, 255, 255, 0.52);
+      --accent: #21d4fd;
+      --accent-dark: #0eb8d8;
+      --pill: #f6c94a;
+      --shadow: 0 20px 70px rgba(0, 0, 0, 0.45);
+      --radius: 26px;
+    }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: radial-gradient(circle at top, #161616 0%, #0b0b0b 45%, #000 100%);
-  color: #fff;
-  min-height: 100vh;
-}
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(33, 212, 253, 0.10), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(33, 212, 253, 0.07), transparent 22%),
+        linear-gradient(180deg, #111214 0%, #060606 55%, #000000 100%);
+      color: var(--text);
+    }
 
-.wrapper {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
+    body {
+      overflow-x: hidden;
+    }
 
-.card {
-  position: relative;
-  width: 100%;
-  max-width: 420px;
-  background: #050505;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 20px;
-  padding: 26px 20px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  text-align: center;
-}
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 14px 26px;
+    }
 
-/* badge */
-.proof-badge {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: #111;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  padding: 10px 12px;
-  width: 170px;
-  text-align: left;
-  font-size: 12px;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
+    .shell {
+      width: 100%;
+      max-width: 460px;
+      position: relative;
+    }
 
-.proof-badge.fade {
-  opacity: 0;
-  transform: translateY(6px);
-}
+    .activity-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 12px;
+      min-height: 58px;
+    }
 
-.name {
-  font-weight: 700;
-}
+    .activity-chip {
+      width: 100%;
+      max-width: 340px;
+      background: rgba(18, 18, 19, 0.92);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 12px 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      backdrop-filter: blur(8px);
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
 
-.status {
-  color: #28d7ff;
-  font-weight: 600;
-}
+    .activity-chip.fade {
+      opacity: 0;
+      transform: translateY(8px);
+    }
 
-.location {
-  color: rgba(255,255,255,0.6);
-  font-size: 11px;
-}
+    .activity-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      font-size: 12px;
+      line-height: 1.2;
+    }
 
-/* text */
-.top-note {
-  font-size: 11px;
-  font-weight: 700;
-  background: #f4c542;
-  color: #000;
-  padding: 8px 10px;
-  border-radius: 10px;
-  display: inline-block;
-  margin-bottom: 16px;
-}
+    .activity-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #39e27d;
+      flex-shrink: 0;
+    }
 
-h1 {
-  font-size: 30px;
-  font-weight: 800;
-  margin-bottom: 10px;
-}
+    .activity-name {
+      font-weight: 700;
+      color: #fff;
+    }
 
-.accent {
-  color: #28d7ff;
-}
+    .activity-city {
+      color: var(--muted-2);
+      font-size: 11px;
+      margin-left: auto;
+      white-space: nowrap;
+    }
 
-.subtext {
-  font-size: 14px;
-  color: rgba(255,255,255,0.8);
-  margin-bottom: 16px;
-}
+    .activity-text {
+      font-size: 12px;
+      color: #bfefff;
+      font-weight: 600;
+      line-height: 1.35;
+    }
 
-/* urgency */
-.urgency {
-  background: #111;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 16px;
-  font-size: 13px;
-  font-weight: 600;
-}
+    .card {
+      background: linear-gradient(180deg, rgba(17,17,18,0.96) 0%, rgba(8,8,9,0.96) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px 18px 18px;
+      position: relative;
+      overflow: hidden;
+    }
 
-/* steps */
-.steps {
-  text-align: left;
-  background: #111;
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 16px;
-}
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(33, 212, 253, 0.12), transparent 22%),
+        radial-gradient(circle at 100% 20%, rgba(33, 212, 253, 0.07), transparent 18%);
+      pointer-events: none;
+    }
 
-.step {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
+    .inner {
+      position: relative;
+      z-index: 1;
+    }
 
-.step:last-child {
-  margin-bottom: 0;
-}
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--pill);
+      color: #111;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      margin-bottom: 16px;
+    }
 
-.step-num {
-  background: #28d7ff;
-  color: #000;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    h1 {
+      font-size: 31px;
+      line-height: 1.05;
+      letter-spacing: -0.9px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
 
-.step-text {
-  font-size: 13px;
-}
+    .accent {
+      color: var(--accent);
+    }
 
-/* CTA */
-.cta {
-  display: block;
-  width: 100%;
-  background: linear-gradient(180deg, #2ee4ff, #10bcd7);
-  color: #000;
-  font-weight: 800;
-  text-decoration: none;
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 17px;
-  margin-bottom: 10px;
-}
+    .subtext {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
 
-/* footer */
-.disclaimer {
-  font-size: 11px;
-  color: rgba(255,255,255,0.6);
-}
-</style>
+    .status-bar {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .status-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .status-sub {
+      font-size: 12px;
+      line-height: 1.4;
+      color: var(--muted-2);
+    }
+
+    .steps {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .steps-head {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-align: left;
+      color: #fff;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      text-align: left;
+      margin-bottom: 12px;
+    }
+
+    .step:last-child {
+      margin-bottom: 0;
+    }
+
+    .step-num {
+      width: 26px;
+      height: 26px;
+      min-width: 26px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, var(--accent) 0%, var(--accent-dark) 100%);
+      color: #041018;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      margin-top: 1px;
+    }
+
+    .step-copy {
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .step-copy strong {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .cta {
+      display: block;
+      width: 100%;
+      border: none;
+      outline: none;
+      text-decoration: none;
+      text-align: center;
+      background: linear-gradient(180deg, #31e5ff 0%, #10bfd9 100%);
+      color: #041018;
+      font-size: 18px;
+      font-weight: 800;
+      padding: 17px 16px;
+      border-radius: 16px;
+      box-shadow: 0 12px 32px rgba(16, 191, 217, 0.28);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      margin-bottom: 12px;
+    }
+
+    .cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 36px rgba(16, 191, 217, 0.34);
+    }
+
+    .micro {
+      font-size: 11px;
+      line-height: 1.45;
+      color: var(--muted-2);
+      text-align: center;
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 11px;
+      line-height: 1.45;
+      color: rgba(255,255,255,0.48);
+      text-align: center;
+    }
+
+    @media (max-width: 420px) {
+      .page {
+        padding: 14px 10px 20px;
+      }
+
+      .shell {
+        max-width: 100%;
+      }
+
+      .activity-wrap {
+        margin-bottom: 10px;
+        min-height: 54px;
+      }
+
+      .activity-chip {
+        max-width: 100%;
+        border-radius: 16px;
+        padding: 11px 12px;
+      }
+
+      .card {
+        border-radius: 22px;
+        padding: 18px 14px 16px;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+
+      .subtext {
+        font-size: 13px;
+      }
+
+      .cta {
+        font-size: 17px;
+        padding: 16px 14px;
+        border-radius: 14px;
+      }
+
+      .steps {
+        padding: 12px;
+      }
+
+      .step-copy {
+        font-size: 12.5px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      h1 {
+        font-size: 24px;
+      }
+
+      .eyebrow {
+        font-size: 10px;
+      }
+
+      .activity-top,
+      .activity-text,
+      .status-title,
+      .status-sub,
+      .step-copy {
+        line-height: 1.35;
+      }
+    }
+  </style>
 </head>
-
 <body>
-
-<div class="wrapper">
-  <div class="card">
-
-    <!-- rotating badge -->
-    <div class="proof-badge" id="proofBadge">
-      <div class="name" id="proofName">David L.</div>
-      <div class="status" id="proofStatus">✓ Match found during search</div>
-      <div class="location" id="proofLocation">Atlanta, GA</div>
-    </div>
-
-    <div class="top-note">Check availability in your area</div>
-
-    <h1>See If You May Have <span class="accent">Unclaimed Funds</span></h1>
-
-    <p class="subtext">
-      Continue to check whether there may be unclaimed money or assets linked to your information.
-    </p>
-
-    <div class="urgency">
-      Limited search access available right now
-    </div>
-
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-text">Click continue below</div>
+  <div class="page">
+    <div class="shell">
+      <div class="activity-wrap">
+        <div class="activity-chip" id="activityChip">
+          <div class="activity-top">
+            <span class="activity-dot"></span>
+            <span class="activity-name" id="activityName">Michael R.</span>
+            <span class="activity-city" id="activityCity">Tampa, FL</span>
+          </div>
+          <div class="activity-text" id="activityText">Recently completed the next step</div>
+        </div>
       </div>
 
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-text">Enter your details</div>
-      </div>
+      <div class="card">
+        <div class="inner">
+          <div class="eyebrow">Check availability in your area</div>
 
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-text">Complete required steps on next page</div>
+          <h1>
+            See If You May Have <span class="accent">Unclaimed Funds</span>
+          </h1>
+
+          <p class="subtext">
+            Continue to the next page to check whether unclaimed money or related records may be linked to your information.
+          </p>
+
+          <div class="status-bar">
+            <div class="status-title">Search access is currently available</div>
+            <div class="status-sub">Complete the next step below to continue to the search page.</div>
+          </div>
+
+          <div class="steps">
+            <div class="steps-head">How it works:</div>
+
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-copy"><strong>Tap continue</strong> to go to the next page.</div>
+            </div>
+
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-copy"><strong>Enter your information</strong> where requested.</div>
+            </div>
+
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-copy"><strong>Review and complete</strong> any required steps shown on the next page.</div>
+            </div>
+          </div>
+
+          <a class="cta" href="https://giftclick.org/aff_c?offer_id=1420&aff_id=170653" target="_blank" rel="noopener noreferrer">
+            Continue to Check
+          </a>
+
+          <div class="micro">
+            By continuing, you may be redirected to a third-party page where additional information and consent may be required.
+          </div>
+
+          <div class="footer-note">
+            This site is not affiliated with any government agency. Results are not guaranteed.
+          </div>
+        </div>
       </div>
     </div>
-
-    <a href="https://giftclick.org/aff_c?offer_id=1420&aff_id=170653" class="cta">Continue to Check</a>
-
-    <div class="disclaimer">
-      This site is not affiliated with any government agency. Results are not guaranteed.
-    </div>
-
   </div>
-</div>
 
-<script>
-const names = ["David L.","Maria S.","James T.","Ashley R.","Kevin M.","Jessica B.","Chris D."];
-const locations = ["Atlanta, GA","Houston, TX","Orlando, FL","Phoenix, AZ","Chicago, IL","Dallas, TX","Charlotte, NC"];
-const statuses = [
-  "✓ Match found during search",
-  "✓ Possible records located",
-  "✓ Completed a search",
-  "✓ Records appeared under name",
-  "✓ Search returned results"
-];
+  <script>
+    const activityData = [
+      { name: "Michael R.", city: "Tampa, FL", text: "Claimed $341.77" },
+      { name: "Ashley T.", city: "Dallas, TX", text: "Claimed $1080.18" },
+      { name: "Jordan M.", city: "Atlanta, GA", text: "Claimed $492.05" },
+      { name: "Samantha L.", city: "Phoenix, AZ", text: "Claimed $106.07" },
+      { name: "Chris D.", city: "Charlotte, NC", text: "Claimed $3998.50" },
+      { name: "Anthony P.", city: "Houston, TX", text: "Claimed $98.76" },
+      { name: "Nicole H.", city: "Orlando, FL", text: "Claimed $410.00" },
+      { name: "Brandon S.", city: "Nashville, TN", text: "Claimed $76.71" },
+      { name: "Kayla J.", city: "Jacksonville, FL", text: "Claimed $292.00" },
+      { name: "Eric W.", city: "Columbus, OH", text: "Claimed $1456.08" },
+      { name: "Lauren C.", city: "Raleigh, NC", text: "Claimed $98.22" },
+      { name: "Tyler B.", city: "Indianapolis, IN", text: "Claimed $387.90" }
+    ];
 
-const nameEl = document.getElementById("proofName");
-const statusEl = document.getElementById("proofStatus");
-const locationEl = document.getElementById("proofLocation");
-const badge = document.getElementById("proofBadge");
+    const chip = document.getElementById("activityChip");
+    const nameEl = document.getElementById("activityName");
+    const cityEl = document.getElementById("activityCity");
+    const textEl = document.getElementById("activityText");
 
-function rotateProof() {
-  badge.classList.add("fade");
+    let lastIndex = 0;
 
-  setTimeout(() => {
-    const i = Math.floor(Math.random() * names.length);
-    const j = Math.floor(Math.random() * statuses.length);
+    function rotateActivity() {
+      chip.classList.add("fade");
 
-    nameEl.textContent = names[i];
-    statusEl.textContent = statuses[j];
-    locationEl.textContent = locations[i];
+      setTimeout(() => {
+        let nextIndex;
+        do {
+          nextIndex = Math.floor(Math.random() * activityData.length);
+        } while (nextIndex === lastIndex && activityData.length > 1);
 
-    badge.classList.remove("fade");
-  }, 300);
-}
+        lastIndex = nextIndex;
+        const item = activityData[nextIndex];
 
-setInterval(rotateProof, 3000);
-</script>
+        nameEl.textContent = item.name;
+        cityEl.textContent = item.city;
+        textEl.textContent = item.text;
 
+        chip.classList.remove("fade");
+      }, 260);
+    }
+
+    setInterval(rotateActivity, 2800);
+  </script>
 </body>
 </html>
