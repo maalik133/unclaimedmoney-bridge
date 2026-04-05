@@ -12,28 +12,27 @@
     html, body {
       margin: 0;
       padding: 0;
-      background: #070707;
-      color: #fff;
-      font-family: Arial, Helvetica, sans-serif;
       min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #070707;
+      color: #ffffff;
     }
 
     body {
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 0;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.04), transparent 30%),
+        linear-gradient(180deg, #0b0b0b 0%, #050505 100%);
     }
 
     .page {
       width: 100%;
       min-height: 100vh;
-      background:
-        radial-gradient(circle at top, rgba(255,255,255,0.04), transparent 35%),
-        linear-gradient(180deg, #090909 0%, #050505 100%);
       display: flex;
       justify-content: center;
-      padding: 14px 12px 24px;
+      padding: 12px 10px 20px;
     }
 
     .phone-shell {
@@ -43,64 +42,66 @@
 
     .card {
       width: 100%;
-      background: #000;
+      background: #000000;
       border-radius: 18px;
-      padding: 18px 16px 22px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.45);
-      border: 1px solid rgba(255,255,255,0.04);
+      padding: 16px 14px 20px;
+      border: 1px solid rgba(255,255,255,0.05);
+      box-shadow: 0 10px 35px rgba(0,0,0,0.4);
     }
 
     .top-proof {
       display: flex;
       justify-content: flex-end;
       margin-bottom: 14px;
+      min-height: 52px;
     }
 
     .proof-pill {
       background: #161616;
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.07);
       border-radius: 12px;
       padding: 8px 10px;
-      min-width: 128px;
+      min-width: 136px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.25);
     }
 
     .proof-name {
       font-size: 10px;
-      color: #f3f3f3;
+      color: #f1f1f1;
       font-weight: 700;
       margin-bottom: 4px;
     }
 
     .proof-amount {
       font-size: 12px;
-      color: #36d67c;
+      color: #33d17a;
       font-weight: 700;
+      line-height: 1.2;
     }
 
     .proof-location {
       font-size: 10px;
-      color: #8d8d8d;
-      margin-top: 2px;
+      color: #8f8f8f;
+      margin-top: 3px;
     }
 
     h1 {
       margin: 0;
       text-align: center;
-      font-size: 34px;
+      font-size: 32px;
       line-height: 1.03;
       font-weight: 800;
-      letter-spacing: -0.8px;
+      letter-spacing: -0.9px;
     }
 
     .green {
-      color: #36d67c;
+      color: #33d17a;
     }
 
     .subhead {
       margin: 14px auto 10px;
       text-align: center;
-      color: #ff6f4d;
+      color: #ff744f;
       font-size: 14px;
       line-height: 1.35;
       font-weight: 700;
@@ -108,9 +109,9 @@
     }
 
     .urgency-bar {
-      background: #f4deb0;
-      color: #5f4b17;
-      border: 1px solid #dfc178;
+      background: #f3deb1;
+      color: #5d4a18;
+      border: 1px solid #ddc27d;
       border-radius: 12px;
       padding: 11px 12px;
       display: flex;
@@ -143,7 +144,7 @@
     .timer {
       font-size: 22px;
       font-weight: 800;
-      color: #fff;
+      color: #ffffff;
       letter-spacing: 1px;
     }
 
@@ -164,7 +165,7 @@
       margin-bottom: 10px;
     }
 
-    .stars {
+    .title-stars {
       color: #f5c543;
       font-size: 13px;
       letter-spacing: 1px;
@@ -196,7 +197,7 @@
     }
 
     .review-text {
-      color: #d4d4d4;
+      color: #d5d5d5;
       font-size: 12.5px;
       line-height: 1.45;
       margin-bottom: 8px;
@@ -205,7 +206,7 @@
     .review-name {
       font-size: 12px;
       font-weight: 700;
-      color: #fff;
+      color: #ffffff;
     }
 
     .review-location {
@@ -214,11 +215,19 @@
       margin-top: 2px;
     }
 
+    .next-step {
+      margin: 14px 0 12px;
+      text-align: center;
+      font-size: 12px;
+      color: #a6a6a6;
+      line-height: 1.4;
+    }
+
     .footer-links {
       display: flex;
       justify-content: center;
       gap: 16px;
-      margin: 16px 0 14px;
+      margin: 0 0 14px;
       font-size: 11px;
       color: #8d8d8d;
       flex-wrap: wrap;
@@ -252,7 +261,7 @@
       margin-top: 10px;
       text-align: center;
       font-size: 10.5px;
-      color: #6f6f6f;
+      color: #707070;
       line-height: 1.4;
     }
 
@@ -278,10 +287,8 @@
       <div class="card">
 
         <div class="top-proof">
-          <div class="proof-pill">
-            <div class="proof-name">Michael R.</div>
-            <div class="proof-amount">$1,184 located</div>
-            <div class="proof-location">Phoenix, AZ</div>
+          <div class="proof-pill" id="proofBox">
+            <div class="proof-name">Loading...</div>
           </div>
         </div>
 
@@ -306,38 +313,15 @@
 
         <div class="reviews-box">
           <div class="reviews-title">
-            <span class="stars">★★★★★</span>
+            <span class="title-stars">★★★★★</span>
             <span>What People Are Saying</span>
           </div>
 
-          <div class="review-list" id="reviewList">
-            <div class="review">
-              <div class="review-stars">★★★★★</div>
-              <div class="review-text">
-                I checked just to see and there was money tied to an old address. It was not a huge process either. Took me a couple minutes to look into it.
-              </div>
-              <div class="review-name">Danielle S.</div>
-              <div class="review-location">Tampa, Florida</div>
-            </div>
+          <div class="review-list" id="reviewList"></div>
+        </div>
 
-            <div class="review">
-              <div class="review-stars">★★★★★</div>
-              <div class="review-text">
-                I had no idea anything would come up. Found a little over $900 connected to my name from years ago. Glad I actually checked.
-              </div>
-              <div class="review-name">Eric M.</div>
-              <div class="review-location">Columbus, Ohio</div>
-            </div>
-
-            <div class="review">
-              <div class="review-stars">★★★★★</div>
-              <div class="review-text">
-                I was expecting nothing honestly. Ended up seeing funds from an old account I forgot about. Way easier than I thought it would be.
-              </div>
-              <div class="review-name">Vanessa R.</div>
-              <div class="review-location">Mesa, Arizona</div>
-            </div>
-          </div>
+        <div class="next-step">
+          Takes about 60 seconds to enter your details and check for matching records
         </div>
 
         <div class="footer-links">
@@ -345,7 +329,7 @@
           <a href="#">Terms of Service</a>
         </div>
 
-        <a href="https://giftclick.org/aff_c?offer_id=1420&aff_id=170653" class="cta" target="_blank">Check Available Funds →</a>
+        <a href="https://giftclick.org/aff_c?offer_id=1420&aff_id=170653" class="cta" target="_blank">Start My Search →</a>
 
         <div class="fineprint">
           Results will vary. Availability depends on public records and submitted information.
@@ -356,38 +340,66 @@
   </div>
 
   <script>
+    const proofs = [
+      { name: "Michael R.", amount: "$1,184 located", location: "Phoenix, AZ" },
+      { name: "Tiffany S.", amount: "$2,047 located", location: "Orlando, FL" },
+      { name: "Carlos M.", amount: "$768 located", location: "San Antonio, TX" },
+      { name: "Jordan P.", amount: "$1,392 located", location: "Columbus, OH" },
+      { name: "Ashley D.", amount: "$2,611 located", location: "Sacramento, CA" },
+      { name: "Brianna T.", amount: "$943 located", location: "Charlotte, NC" }
+    ];
+
     const reviews = [
       {
         text: "I checked just to see and there was money tied to an old address. It was not a huge process either. Took me a couple minutes to look into it.",
         name: "Danielle S.",
-        location: "Tampa, Florida"
+        location: "Tampa, Florida",
+        stars: "★★★★★"
       },
       {
         text: "I had no idea anything would come up. Found a little over $900 connected to my name from years ago. Glad I actually checked.",
         name: "Eric M.",
-        location: "Columbus, Ohio"
+        location: "Columbus, Ohio",
+        stars: "★★★★★"
+      },
+      {
+        text: "I did get a result but it took a minute to go through everything. Still worth checking if you have time.",
+        name: "Kevin L.",
+        location: "Denver, Colorado",
+        stars: "★★★★☆"
       },
       {
         text: "I was expecting nothing honestly. Ended up seeing funds from an old account I forgot about. Way easier than I thought it would be.",
         name: "Vanessa R.",
-        location: "Mesa, Arizona"
+        location: "Mesa, Arizona",
+        stars: "★★★★★"
       },
       {
         text: "Mine showed up from an old payroll check. I almost skipped it because I figured it was not worth trying, but it turned out to be worth checking.",
         name: "Brandon T.",
-        location: "Charlotte, North Carolina"
+        location: "Charlotte, North Carolina",
+        stars: "★★★★★"
       },
       {
-        text: "I had moved twice and thought there was no chance anything would be under my name. A result actually came up, which surprised me.",
-        name: "Jasmine L.",
-        location: "Sacramento, California"
-      },
-      {
-        text: "I only did it because a friend mentioned it. Found funds connected to a bank account I closed a long time ago.",
-        name: "Nicole P.",
-        location: "Louisville, Kentucky"
+        text: "Not as much as I expected but something did show up tied to an old address so I can't complain.",
+        name: "Rachel G.",
+        location: "Nashville, Tennessee",
+        stars: "★★★★☆"
       }
     ];
+
+    let proofIndex = 0;
+    let reviewIndex = 0;
+
+    function updateProof() {
+      const p = proofs[proofIndex];
+      document.getElementById("proofBox").innerHTML = `
+        <div class="proof-name">${p.name}</div>
+        <div class="proof-amount">${p.amount}</div>
+        <div class="proof-location">${p.location}</div>
+      `;
+      proofIndex = (proofIndex + 1) % proofs.length;
+    }
 
     function renderReviews(startIndex) {
       const reviewList = document.getElementById("reviewList");
@@ -397,7 +409,7 @@
         const review = reviews[(startIndex + i) % reviews.length];
         html += `
           <div class="review">
-            <div class="review-stars">★★★★★</div>
+            <div class="review-stars">${review.stars}</div>
             <div class="review-text">${review.text}</div>
             <div class="review-name">${review.name}</div>
             <div class="review-location">${review.location}</div>
@@ -408,8 +420,12 @@
       reviewList.innerHTML = html;
     }
 
-    let reviewIndex = 0;
+    updateProof();
     renderReviews(reviewIndex);
+
+    setInterval(() => {
+      updateProof();
+    }, 3500);
 
     setInterval(() => {
       reviewIndex = (reviewIndex + 1) % reviews.length;
